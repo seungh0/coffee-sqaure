@@ -1,4 +1,4 @@
-package com.homecafe.config.domain;
+package com.homecafe.domain;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
