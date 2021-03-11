@@ -1,7 +1,6 @@
 package com.homecafe.service.auth;
 
 import com.homecafe.domain.member.Member;
-import com.homecafe.domain.member.MemberProvider;
 import com.homecafe.domain.member.MemberRepository;
 import com.homecafe.external.kakao.KaKaoApiCaller;
 import com.homecafe.external.kakao.dto.response.KaKaoUserInfoResponse;
@@ -27,7 +26,7 @@ public class AuthService {
 	public AuthResponse handleKaKaoAuthentication(String accessToken) {
 		KaKaoUserInfoResponse userInfoResponse = kaKaoApiCaller.getKaKaoUserProfileInfo(accessToken);
 
-		Member findMember = memberRepository.findMemberByEmailAndProvider(userInfoResponse.getEmail(), MemberProvider.KAKAO);
+		Member findMember = memberRepository.findMemberByEmail(userInfoResponse.getEmail());
 		if (findMember == null) {
 			return AuthResponse.signUpWithKaKao(userInfoResponse.getEmail(), userInfoResponse.getName());
 		}
