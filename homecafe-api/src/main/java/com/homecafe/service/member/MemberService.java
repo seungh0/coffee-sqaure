@@ -3,6 +3,7 @@ package com.homecafe.service.member;
 import com.homecafe.domain.member.Member;
 import com.homecafe.domain.member.MemberRepository;
 import com.homecafe.service.member.dto.request.SignUpMemberRequest;
+import com.homecafe.service.member.dto.request.UpdateMemberInfoRequest;
 import com.homecafe.service.member.dto.response.MemberInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,12 @@ public class MemberService {
 	@Transactional(readOnly = true)
 	public MemberInfoResponse getMemberInfo(Long memberId) {
 		Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
+		return MemberInfoResponse.of(member);
+	}
+
+	public MemberInfoResponse updateMemberInfo(UpdateMemberInfoRequest request, Long memberId) {
+		Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
+		member.updateMemberInfo(request.getName(), request.getProfileUrl());
 		return MemberInfoResponse.of(member);
 	}
 

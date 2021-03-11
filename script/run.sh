@@ -13,10 +13,6 @@ else
   sleep 3
 fi
 
-cd /
-./gradlew clean build
-
-
 cd /home/ubuntu/homecafe-backend
 
 ./gradlew clean build
