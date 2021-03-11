@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 import static com.homecafe.domain.board.QBoard.board;
+import static com.homecafe.domain.board.QBoardPicture.boardPicture;
 
 @RequiredArgsConstructor
 public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
@@ -16,6 +17,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	@Override
 	public List<Board> findBoardsOrderByIdDesc(int size) {
 		return queryFactory.selectFrom(board)
+				.innerJoin(board.pictureList, boardPicture).fetchJoin()
 				.orderBy(board.id.desc())
 				.limit(size)
 				.fetch();
@@ -24,12 +26,22 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	@Override
 	public List<Board> findBoardsLessThanOrderByIdDescLimit(Long lastBoardId, int size) {
 		return queryFactory.selectFrom(board)
+				.innerJoin(board.pictureList, boardPicture).fetchJoin()
 				.where(
 						board.id.lt(lastBoardId)
 				)
 				.orderBy(board.id.desc())
 				.limit(size)
 				.fetch();
+	}
+
+	@Override
+	public Board findBoardById(Long boardId) {
+		return queryFactory.selectFrom(board)
+				.innerJoin(board.pictureList, boardPicture).fetchJoin()
+				.where(
+						board.id.eq(boardId)
+				).fetchOne();
 	}
 
 }

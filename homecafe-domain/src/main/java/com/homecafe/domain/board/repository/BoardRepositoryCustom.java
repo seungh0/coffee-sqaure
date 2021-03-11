@@ -10,4 +10,6 @@ public interface BoardRepositoryCustom {
 
 	List<Board> findBoardsLessThanOrderByIdDescLimit(Long lastBoardId, int size);
 
+	Board findBoardById(Long boardId);
+
 }

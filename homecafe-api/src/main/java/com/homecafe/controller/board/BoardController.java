@@ -27,4 +27,9 @@ public class BoardController {
 		return ApiResponse.of(boardService.retrieveBoardList(lastBoardId, size));
 	}
 
+	@GetMapping("/api/v1/board")
+	public ApiResponse<BoardInfoResponse> retrieveBoard(@RequestParam Long boardId) {
+		return ApiResponse.of(boardService.retrieveBoard(boardId));
+	}
+
 }

@@ -42,4 +42,10 @@ public class BoardService {
 				.collect(Collectors.toList());
 	}
 
+	@Transactional(readOnly = true)
+	public BoardInfoResponse retrieveBoard(Long boardId) {
+		Board board = BoardServiceUtils.findBoardById(boardRepository, boardId);
+		return BoardInfoResponse.of(board);
+	}
+
 }
