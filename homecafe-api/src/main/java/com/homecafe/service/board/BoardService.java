@@ -56,6 +56,27 @@ public class BoardService {
 	}
 
 	@Transactional(readOnly = true)
+	public List<BoardWithCreatorInfoResponse> retrieveSearchBoardList(String keyword, Long lastBoardId, int size) {
+		return lastBoardId == 0 ? getLatestSearchBoards(keyword, size) : getLatestSearchBoardLessThanId(keyword, lastBoardId, size);
+	}
+
+	private List<BoardWithCreatorInfoResponse> getLatestSearchBoards(String keyword, int size) {
+		List<Board> boardList = boardRepository.findBoardsWithKeywordOrderByIdDesc(keyword, size);
+		BoardMemberCollection collection = BoardMemberCollection.of(memberRepository, boardList);
+		return boardList.stream()
+				.map(board -> BoardWithCreatorInfoResponse.of(board, collection.getMember(board.getMemberId())))
+				.collect(Collectors.toList());
+	}
+
+	private List<BoardWithCreatorInfoResponse> getLatestSearchBoardLessThanId(String keyword, Long lastBoardId, int size) {
+		List<Board> boardList = boardRepository.findBoardsWithKeywordLessThanOrderByIdDescLimit(keyword, lastBoardId, size);
+		BoardMemberCollection collection = BoardMemberCollection.of(memberRepository, boardList);
+		return boardList.stream()
+				.map(board -> BoardWithCreatorInfoResponse.of(board, collection.getMember(board.getMemberId())))
+				.collect(Collectors.toList());
+	}
+
+	@Transactional(readOnly = true)
 	public BoardWithCommentInfoResponse retrieveBoard(Long boardId) {
 		Board board = BoardServiceUtils.findBoardById(boardRepository, boardId);
 		Member member = MemberServiceUtils.findMemberById(memberRepository, board.getMemberId());

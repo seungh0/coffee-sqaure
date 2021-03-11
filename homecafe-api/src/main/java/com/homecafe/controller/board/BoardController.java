@@ -32,6 +32,12 @@ public class BoardController {
 		return ApiResponse.of(boardService.retrieveBoardList(lastBoardId, size));
 	}
 
+	@Operation(summary = "메인 페이지 키워드 검색 피드 리스트 API", description = "lastBoardId= 가장 마지막에 보여지는 피드의 id, size=몇 개의 피드를 받아올 것인지")
+	@GetMapping("/api/v1/board/list/search")
+	public ApiResponse<List<BoardWithCreatorInfoResponse>> retrieveSearchBoardList(@RequestParam String keyword, @RequestParam long lastBoardId, @RequestParam int size) {
+		return ApiResponse.of(boardService.retrieveSearchBoardList(keyword, lastBoardId, size));
+	}
+
 	@Operation(summary = "특정 피드의 상세 조회 API")
 	@GetMapping("/api/v1/board")
 	public ApiResponse<BoardWithCommentInfoResponse> retrieveBoard(@RequestParam Long boardId) {

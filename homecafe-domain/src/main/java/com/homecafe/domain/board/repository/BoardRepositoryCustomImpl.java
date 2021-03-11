@@ -44,4 +44,29 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 				).fetchOne();
 	}
 
+	@Override
+	public List<Board> findBoardsWithKeywordOrderByIdDesc(String keyword, int size) {
+		return queryFactory.selectFrom(board)
+				.innerJoin(board.pictureList, boardPicture).fetchJoin()
+				.where(
+						board.title.contains(keyword)
+				)
+				.orderBy(board.id.desc())
+				.limit(size)
+				.fetch();
+	}
+
+	@Override
+	public List<Board> findBoardsWithKeywordLessThanOrderByIdDescLimit(String keyword, Long lastBoardId, int size) {
+		return queryFactory.selectFrom(board)
+				.innerJoin(board.pictureList, boardPicture).fetchJoin()
+				.where(
+						board.id.lt(lastBoardId),
+						board.title.contains(keyword)
+				)
+				.orderBy(board.id.desc())
+				.limit(size)
+				.fetch();
+	}
+
 }

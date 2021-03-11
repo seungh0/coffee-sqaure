@@ -12,4 +12,8 @@ public interface BoardRepositoryCustom {
 
 	Board findBoardById(Long boardId);
 
+	List<Board> findBoardsWithKeywordOrderByIdDesc(String keyword, int size);
+
+	List<Board> findBoardsWithKeywordLessThanOrderByIdDescLimit(String keyword, Long lastBoardId, int size);
+
 }
