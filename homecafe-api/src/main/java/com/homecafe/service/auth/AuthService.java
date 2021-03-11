@@ -25,7 +25,6 @@ public class AuthService {
 	@Transactional(readOnly = true)
 	public AuthResponse handleKaKaoAuthentication(String accessToken) {
 		KaKaoUserInfoResponse userInfoResponse = kaKaoApiCaller.getKaKaoUserProfileInfo(accessToken);
-
 		Member findMember = memberRepository.findMemberByEmail(userInfoResponse.getEmail());
 		if (findMember == null) {
 			return AuthResponse.signUpWithKaKao(userInfoResponse.getEmail(), userInfoResponse.getName());
