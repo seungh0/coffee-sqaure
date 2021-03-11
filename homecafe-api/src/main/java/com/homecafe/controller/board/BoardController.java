@@ -58,4 +58,10 @@ public class BoardController {
 		return ApiResponse.OK;
 	}
 
+	@Operation(summary = "내가 업로드한 피드들의 리스트를 조회하는 API (마이페이지)", description = "Bearer 토큰이 필요합니다")
+	@GetMapping("/api/v1/board/my")
+	public ApiResponse<List<BoardInfoResponse>> retrieveMyBoardList(@LoginMember Long memberId) {
+		return ApiResponse.of(boardService.retrieveMyBoardList(memberId));
+	}
+
 }

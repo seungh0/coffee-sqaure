@@ -69,4 +69,13 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 				.fetch();
 	}
 
+	@Override
+	public List<Board> findBoardByMemberId(Long memberId) {
+		return queryFactory.selectFrom(board)
+				.innerJoin(board.pictureList, boardPicture).fetchJoin()
+				.where(
+						board.memberId.eq(memberId)
+				).fetch();
+	}
+
 }

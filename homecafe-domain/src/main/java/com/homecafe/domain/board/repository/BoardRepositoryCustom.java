@@ -16,4 +16,6 @@ public interface BoardRepositoryCustom {
 
 	List<Board> findBoardsWithKeywordLessThanOrderByIdDescLimit(String keyword, Long lastBoardId, int size);
 
+	List<Board> findBoardByMemberId(Long memberId);
+
 }

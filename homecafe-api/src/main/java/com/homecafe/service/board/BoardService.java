@@ -96,4 +96,12 @@ public class BoardService {
 		board.cancelLike(memberId);
 	}
 
+	@Transactional(readOnly = true)
+	public List<BoardInfoResponse> retrieveMyBoardList(Long memberId) {
+		List<Board> boardList = boardRepository.findBoardByMemberId(memberId);
+		return boardList.stream()
+				.map(BoardInfoResponse::of)
+				.collect(Collectors.toList());
+	}
+
 }
