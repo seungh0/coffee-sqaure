@@ -5,6 +5,7 @@ import com.homecafe.controller.ApiResponse;
 import com.homecafe.service.board.BoardService;
 import com.homecafe.service.board.dto.request.CreateBoardRequest;
 import com.homecafe.service.board.dto.response.BoardInfoResponse;
+import com.homecafe.service.board.dto.response.BoardWithCommentInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class BoardController {
 
 	@Operation(summary = "특정 피드의 상세 조회 API")
 	@GetMapping("/api/v1/board")
-	public ApiResponse<BoardInfoResponse> retrieveBoard(@RequestParam Long boardId) {
+	public ApiResponse<BoardWithCommentInfoResponse> retrieveBoard(@RequestParam Long boardId) {
 		return ApiResponse.of(boardService.retrieveBoard(boardId));
 	}
 
