@@ -1,6 +1,7 @@
 package com.homecafe.service.upload;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.homecafe.exception.ValidationException;
 import com.homecafe.external.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class FileUploadService {
 		try (InputStream inputStream = file.getInputStream()) {
 			s3Service.uploadFile(inputStream, objectMetadata, fileName);
 		} catch (IOException e) {
-			throw new IllegalArgumentException(String.format("파일 변환 중 에러가 발생하였습니다 (%s)", file.getOriginalFilename()));
+			throw new ValidationException(String.format("파일 변환 중 에러가 발생하였습니다 (%s)", file.getOriginalFilename()), "잘못된 형식의 파일입니다.");
 		}
 		return s3Service.getFileUrl(fileName);
 	}
@@ -38,7 +39,7 @@ public class FileUploadService {
 		try {
 			return fileName.substring(fileName.lastIndexOf("."));
 		} catch (StringIndexOutOfBoundsException e) {
-			throw new IllegalArgumentException(String.format("잘못된 형식의 파일 (%s) 입니다", fileName));
+			throw new ValidationException(String.format("잘못된 형식의 파일 (%s) 입니다", fileName), "잘못된 형식의 파일입니다.");
 		}
 	}
 

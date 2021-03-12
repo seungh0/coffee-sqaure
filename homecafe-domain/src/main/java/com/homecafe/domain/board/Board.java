@@ -1,6 +1,8 @@
 package com.homecafe.domain.board;
 
 import com.homecafe.domain.BaseTimeEntity;
+import com.homecafe.exception.ConflictException;
+import com.homecafe.exception.NotFoundException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -62,7 +64,7 @@ public class Board extends BaseTimeEntity {
 
 	public void addLike(Long memberId) {
 		if (hasAlreadyLike(memberId)) {
-			throw new IllegalArgumentException(String.format("이미 멤버 (%s)는 피드 (%s)에 좋아요를 눌렀습니다", memberId, this.id));
+			throw new ConflictException(String.format("이미 멤버 (%s)는 피드 (%s)에 좋아요를 눌렀습니다", memberId, this.id), "이미 해당 피드에 좋아요를 눌렀습다.");
 		}
 		BoardLike boardLike = BoardLike.of(this, memberId);
 		this.boardLikeList.add(boardLike);
@@ -84,7 +86,7 @@ public class Board extends BaseTimeEntity {
 		return this.boardLikeList.stream()
 				.filter(mapper -> mapper.isSameEntity(memberId))
 				.findFirst()
-				.orElseThrow(() -> new IllegalArgumentException(String.format("멤버 (%s)는 피 (%s)에 좋아요를 누른 적이 없습니다", memberId, this.id)));
+				.orElseThrow(() -> new NotFoundException(String.format("멤버 (%s)는 피 (%s)에 좋아요를 누른 적이 없습니다", memberId, this.id), "해당 피드에 좋아요를 누르지 않았습니다."));
 	}
 
 }

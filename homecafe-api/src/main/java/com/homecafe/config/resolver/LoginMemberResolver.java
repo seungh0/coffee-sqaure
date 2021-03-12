@@ -2,6 +2,7 @@ package com.homecafe.config.resolver;
 
 import com.homecafe.config.session.MemberSession;
 import com.homecafe.config.session.SessionConstants;
+import com.homecafe.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -38,14 +39,14 @@ public class LoginMemberResolver implements HandlerMethodArgumentResolver {
 
 	private Session extractSessionFromHeader(String header) {
 		if (header == null) {
-			throw new IllegalArgumentException("세션이 없습니다");
+			throw new UnauthorizedException("세션이 없습니다");
 		}
 		if (!header.startsWith(BEARER_TOKEN)) {
-			throw new IllegalArgumentException(String.format("잘못된 세션입니다 (%s)", header));
+			throw new UnauthorizedException(String.format("잘못된 세션입니다 (%s)", header));
 		}
 		Session session = sessionRepository.getSession(header.split(BEARER_TOKEN)[1]);
 		if (session == null) {
-			throw new IllegalArgumentException(String.format("잘못된 세션입니다 (%s)", header));
+			throw new UnauthorizedException(String.format("잘못된 세션입니다 (%s)", header));
 		}
 		return session;
 	}
