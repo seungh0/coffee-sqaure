@@ -20,4 +20,6 @@ public interface BoardRepositoryCustom {
 
 	Board findBoardByIdAndMemberId(Long boardId, Long memberId);
 
+	List<Board> findLikeBoardByMemberId(Long memberId);
+
 }

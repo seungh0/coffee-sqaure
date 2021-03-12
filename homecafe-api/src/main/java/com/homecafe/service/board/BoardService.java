@@ -120,4 +120,12 @@ public class BoardService {
 				.collect(Collectors.toList());
 	}
 
+	@Transactional(readOnly = true)
+	public List<BoardInfoResponse> retrieveMyLikeBoardList(Long memberId) {
+		List<Board> boardList = boardRepository.findLikeBoardByMemberId(memberId);
+		return boardList.stream()
+				.map(BoardInfoResponse::of)
+				.collect(Collectors.toList());
+	}
+
 }

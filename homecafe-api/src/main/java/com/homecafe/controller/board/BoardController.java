@@ -59,23 +59,29 @@ public class BoardController {
 	}
 
 	@Operation(summary = "피드의 좋아요를 추가하는 API", description = "Bearer 토큰이 필요합니다")
-	@PostMapping("/api/v1/board/like/{boardId}")
-	public ApiResponse<String> addBoardLike(@PathVariable Long boardId, @LoginMember Long memberId) {
+	@PostMapping("/api/v1/board/like")
+	public ApiResponse<String> addBoardLike(@RequestParam Long boardId, @LoginMember Long memberId) {
 		boardService.addBoardLike(boardId, memberId);
 		return ApiResponse.OK;
 	}
 
 	@Operation(summary = "피드의 좋아요를 취소하는 API", description = "Bearer 토큰이 필요합니다")
-	@DeleteMapping("/api/v1/board/like/{boardId}")
-	public ApiResponse<String> cancelBoardLike(@PathVariable Long boardId, @LoginMember Long memberId) {
+	@DeleteMapping("/api/v1/board/like")
+	public ApiResponse<String> cancelBoardLike(@RequestParam Long boardId, @LoginMember Long memberId) {
 		boardService.cancelBoardLike(boardId, memberId);
 		return ApiResponse.OK;
 	}
 
 	@Operation(summary = "내가 업로드한 피드들의 리스트를 조회하는 API (마이페이지)", description = "Bearer 토큰이 필요합니다")
-	@GetMapping("/api/v1/board/my")
+	@GetMapping("/api/v1/board/list/my")
 	public ApiResponse<List<BoardInfoResponse>> retrieveMyBoardList(@LoginMember Long memberId) {
 		return ApiResponse.of(boardService.retrieveMyBoardList(memberId));
+	}
+
+	@Operation(summary = "내가 좋아요를 누른 피드들의 리스트를 조회하는 API (마이페이지)", description = "Bearer 토큰이 필요합니다")
+	@GetMapping("/api/v1/board/list/mylike")
+	public ApiResponse<List<BoardInfoResponse>> retrieveMyLikeBoardList(@LoginMember Long memberId) {
+		return ApiResponse.of(boardService.retrieveMyLikeBoardList(memberId));
 	}
 
 }
