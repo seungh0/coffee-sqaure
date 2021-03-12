@@ -2,6 +2,7 @@ package com.homecafe.service.board.dto.response;
 
 import com.homecafe.domain.board.Board;
 import com.homecafe.domain.comment.BoardComment;
+import com.homecafe.domain.comment.BoardCommentMemberCollection;
 import com.homecafe.domain.member.Member;
 import com.homecafe.service.comment.dto.response.BoardCommentInfoResponse;
 import com.homecafe.service.member.dto.response.MemberInfoResponse;
@@ -23,9 +24,9 @@ public class BoardWithCommentInfoResponse {
 
 	private final List<BoardCommentInfoResponse> comments = new ArrayList<>();
 
-	public static BoardWithCommentInfoResponse of(Board board, List<BoardComment> boardCommentList, Member member) {
+	public static BoardWithCommentInfoResponse of(Board board, List<BoardComment> boardCommentList, Member member, BoardCommentMemberCollection collection) {
 		List<BoardCommentInfoResponse> commentInfoResponses = boardCommentList.stream()
-				.map(BoardCommentInfoResponse::of)
+				.map(boardComment -> BoardCommentInfoResponse.of(boardComment, collection.getMember(boardComment.getMemberId())))
 				.collect(Collectors.toList());
 		BoardWithCommentInfoResponse response = new BoardWithCommentInfoResponse(BoardInfoResponse.of(board), MemberInfoResponse.of(member));
 		response.comments.addAll(commentInfoResponses);

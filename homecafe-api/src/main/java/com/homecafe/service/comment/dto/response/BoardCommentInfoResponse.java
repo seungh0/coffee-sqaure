@@ -1,6 +1,8 @@
 package com.homecafe.service.comment.dto.response;
 
 import com.homecafe.domain.comment.BoardComment;
+import com.homecafe.domain.member.Member;
+import com.homecafe.service.member.dto.response.MemberInfoResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +15,12 @@ public class BoardCommentInfoResponse {
 
 	private final Long boardId;
 
-	private final Long memberId;
-
 	private final String content;
 
-	public static BoardCommentInfoResponse of(BoardComment boardComment) {
-		return new BoardCommentInfoResponse(boardComment.getId(), boardComment.getBoardId(), boardComment.getMemberId(), boardComment.getContent());
+	private final MemberInfoResponse writer;
+
+	public static BoardCommentInfoResponse of(BoardComment boardComment, Member member) {
+		return new BoardCommentInfoResponse(boardComment.getId(), boardComment.getBoardId(), boardComment.getContent(), MemberInfoResponse.of(member));
 	}
 
 }

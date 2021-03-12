@@ -4,6 +4,7 @@ import com.homecafe.domain.board.Board;
 import com.homecafe.domain.board.BoardMemberCollection;
 import com.homecafe.domain.board.BoardRepository;
 import com.homecafe.domain.comment.BoardComment;
+import com.homecafe.domain.comment.BoardCommentMemberCollection;
 import com.homecafe.domain.comment.BoardCommentRepository;
 import com.homecafe.domain.member.Member;
 import com.homecafe.domain.member.MemberRepository;
@@ -82,7 +83,8 @@ public class BoardService {
 		Board board = BoardServiceUtils.findBoardById(boardRepository, boardId);
 		Member member = MemberServiceUtils.findMemberById(memberRepository, board.getMemberId());
 		List<BoardComment> boardCommentList = BoardCommentServiceUtils.findAllBoardCommentsByCommentId(boardCommentRepository, board.getId());
-		return BoardWithCommentInfoResponse.of(board, boardCommentList, member);
+		BoardCommentMemberCollection collection = BoardCommentMemberCollection.of(memberRepository, boardCommentList);
+		return BoardWithCommentInfoResponse.of(board, boardCommentList, member, collection);
 	}
 
 	@Transactional
