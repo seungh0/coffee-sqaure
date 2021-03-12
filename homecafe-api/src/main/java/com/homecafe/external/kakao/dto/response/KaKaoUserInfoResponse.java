@@ -16,30 +16,22 @@ public class KaKaoUserInfoResponse {
 
 	private KaKaoAccountResponse kakaoAccount;
 
-	@ToString
-	@Getter
-	@NoArgsConstructor
-	private static class KaKaoAccountResponse {
-
-		private String email;
-
-		private KaKaoProfileResponse profile;
-
-		@ToString
-		@Getter
-		@NoArgsConstructor
-		public static class KaKaoProfileResponse {
-			private String nickname;
-		}
-
-	}
-
 	public String getEmail() {
 		return this.kakaoAccount.getEmail();
 	}
 
 	public String getName() {
+		if (this.kakaoAccount.getProfile() == null) {
+			return null;
+		}
 		return this.kakaoAccount.getProfile().getNickname();
+	}
+
+	public String getProfileImage() {
+		if (this.kakaoAccount.getProfile() == null) {
+			return null;
+		}
+		return this.kakaoAccount.getProfile().getProfileImage();
 	}
 
 }
