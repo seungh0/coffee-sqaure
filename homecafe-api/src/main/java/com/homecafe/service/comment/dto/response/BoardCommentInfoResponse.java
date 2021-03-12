@@ -6,7 +6,9 @@ import com.homecafe.service.member.dto.response.MemberInfoResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
+@ToString
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoardCommentInfoResponse {

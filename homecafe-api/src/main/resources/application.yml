@@ -13,5 +13,6 @@ spring:
       - swagger
       - cloud
       - aws
+      - rds
   datasource:
     data: classpath:schema/schema-session.sql

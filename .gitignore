@@ -39,3 +39,4 @@ out/
 generated/
 
 application-aws.yml
+application-rds.yml

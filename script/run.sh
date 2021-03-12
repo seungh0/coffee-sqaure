@@ -17,4 +17,4 @@ cd /home/ubuntu/homecafe-backend
 
 ./gradlew clean build
 
-nohup java -jar ./homecafe-api/build/libs/homecafe-api.jar &
+nohup java -jar -Dspring.profiles.active=prod ./homecafe-api/build/libs/homecafe-api.jar &

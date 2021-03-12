@@ -1,5 +1,5 @@
 spring:
-  profiles: local, dev
+  profiles: local, prod
 cloud:
   aws:
     s3:

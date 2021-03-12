@@ -3,9 +3,11 @@ package com.homecafe.service.member.dto.request;
 import com.homecafe.domain.member.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 
+@ToString
 @Getter
 @NoArgsConstructor
 public class SignUpMemberRequest {
