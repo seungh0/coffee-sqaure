@@ -29,6 +29,8 @@ public class Board extends BaseTimeEntity {
 
 	private int likesCount;
 
+	private boolean isDeleted;
+
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<BoardPicture> pictureList = new ArrayList<>();
 
@@ -87,6 +89,17 @@ public class Board extends BaseTimeEntity {
 				.filter(mapper -> mapper.isSameEntity(memberId))
 				.findFirst()
 				.orElseThrow(() -> new NotFoundException(String.format("멤버 (%s)는 피 (%s)에 좋아요를 누른 적이 없습니다", memberId, this.id), "해당 피드에 좋아요를 누르지 않았습니다."));
+	}
+
+	public void delete() {
+		this.isDeleted = true;
+	}
+
+	public void updateInfo(String title, String description, List<String> pictures) {
+		this.title = title;
+		this.description = description;
+		this.pictureList.clear();
+		this.addPictures(pictures);
 	}
 
 }

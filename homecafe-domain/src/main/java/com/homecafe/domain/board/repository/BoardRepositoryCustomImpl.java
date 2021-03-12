@@ -18,6 +18,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	public List<Board> findBoardsOrderByIdDesc(int size) {
 		return queryFactory.selectFrom(board)
 				.innerJoin(board.pictureList, boardPicture).fetchJoin()
+				.where(
+						board.isDeleted.isFalse()
+				)
 				.orderBy(board.id.desc())
 				.limit(size)
 				.fetch();
@@ -28,7 +31,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 		return queryFactory.selectFrom(board)
 				.innerJoin(board.pictureList, boardPicture).fetchJoin()
 				.where(
-						board.id.lt(lastBoardId)
+						board.id.lt(lastBoardId),
+						board.isDeleted.isFalse()
 				)
 				.orderBy(board.id.desc())
 				.limit(size)
@@ -40,7 +44,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 		return queryFactory.selectFrom(board)
 				.innerJoin(board.pictureList, boardPicture).fetchJoin()
 				.where(
-						board.id.eq(boardId)
+						board.id.eq(boardId),
+						board.isDeleted.isFalse()
 				).fetchOne();
 	}
 
@@ -49,7 +54,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 		return queryFactory.selectFrom(board)
 				.innerJoin(board.pictureList, boardPicture).fetchJoin()
 				.where(
-						board.title.contains(keyword)
+						board.title.contains(keyword),
+						board.isDeleted.isFalse()
 				)
 				.orderBy(board.id.desc())
 				.limit(size)
@@ -62,7 +68,8 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 				.innerJoin(board.pictureList, boardPicture).fetchJoin()
 				.where(
 						board.id.lt(lastBoardId),
-						board.title.contains(keyword)
+						board.title.contains(keyword),
+						board.isDeleted.isFalse()
 				)
 				.orderBy(board.id.desc())
 				.limit(size)
@@ -74,8 +81,20 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 		return queryFactory.selectFrom(board)
 				.innerJoin(board.pictureList, boardPicture).fetchJoin()
 				.where(
-						board.memberId.eq(memberId)
+						board.memberId.eq(memberId),
+						board.isDeleted.isFalse()
 				).fetch();
+	}
+
+	@Override
+	public Board findBoardByIdAndMemberId(Long boardId, Long memberId) {
+		return queryFactory.selectFrom(board)
+				.innerJoin(board.pictureList, boardPicture).fetchJoin()
+				.where(
+						board.id.eq(boardId),
+						board.memberId.eq(memberId),
+						board.isDeleted.isFalse()
+				).fetchOne();
 	}
 
 }

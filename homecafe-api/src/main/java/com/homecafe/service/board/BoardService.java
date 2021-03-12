@@ -8,6 +8,7 @@ import com.homecafe.domain.comment.BoardCommentRepository;
 import com.homecafe.domain.member.Member;
 import com.homecafe.domain.member.MemberRepository;
 import com.homecafe.service.board.dto.request.CreateBoardRequest;
+import com.homecafe.service.board.dto.request.UpdateBoardRequest;
 import com.homecafe.service.board.dto.response.BoardInfoResponse;
 import com.homecafe.service.board.dto.response.BoardWithCommentInfoResponse;
 import com.homecafe.service.board.dto.response.BoardWithCreatorInfoResponse;
@@ -82,6 +83,19 @@ public class BoardService {
 		Member member = MemberServiceUtils.findMemberById(memberRepository, board.getMemberId());
 		List<BoardComment> boardCommentList = BoardCommentServiceUtils.findAllBoardCommentsByCommentId(boardCommentRepository, board.getId());
 		return BoardWithCommentInfoResponse.of(board, boardCommentList, member);
+	}
+
+	@Transactional
+	public BoardInfoResponse updateBoard(UpdateBoardRequest request, Long memberId) {
+		Board board = BoardServiceUtils.findBoardByIdAndMemberId(boardRepository, request.getBoardId(), memberId);
+		board.updateInfo(request.getTitle(), request.getDescription(), request.getPictures());
+		return BoardInfoResponse.of(board);
+	}
+
+	@Transactional
+	public void deleteBoard(Long boardId, Long memberId) {
+		Board board = BoardServiceUtils.findBoardByIdAndMemberId(boardRepository, boardId, memberId);
+		board.delete();
 	}
 
 	@Transactional
