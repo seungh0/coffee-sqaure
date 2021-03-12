@@ -21,6 +21,7 @@ public class Member extends BaseTimeEntity {
 	@Embedded
 	private Email email;
 
+	@Column(nullable = false)
 	private String name;
 
 	private String profileUrl;

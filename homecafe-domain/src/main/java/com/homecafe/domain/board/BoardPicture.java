@@ -20,6 +20,7 @@ public class BoardPicture extends BaseTimeEntity {
 	@JoinColumn(name = "board_id", nullable = false)
 	private Board board;
 
+	@Column(nullable = false)
 	private String pictureUrl;
 
 	private BoardPicture(Board board, String pictureUrl) {

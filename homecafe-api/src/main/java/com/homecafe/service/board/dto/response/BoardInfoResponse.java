@@ -20,10 +20,12 @@ public class BoardInfoResponse {
 
 	private final int likesCount;
 
+	private final int commentsCount;
+
 	private final List<String> pictureUrls = new ArrayList<>();
 
 	public static BoardInfoResponse of(Board board) {
-		BoardInfoResponse response = new BoardInfoResponse(board.getId(), board.getTitle(), board.getDescription(), board.getLikesCount());
+		BoardInfoResponse response = new BoardInfoResponse(board.getId(), board.getTitle(), board.getDescription(), board.getLikesCount(), board.getCommentsCount());
 		response.pictureUrls.addAll(board.getPictures());
 		return response;
 	}

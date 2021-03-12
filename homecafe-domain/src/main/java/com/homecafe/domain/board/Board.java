@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,13 +22,18 @@ public class Board extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotNull
 	private Long memberId;
 
+	@Column(nullable = false)
 	private String title;
 
+	@Column(nullable = false)
 	private String description;
 
 	private int likesCount;
+
+	private int commentsCount;
 
 	private boolean isDeleted;
 
@@ -42,6 +48,8 @@ public class Board extends BaseTimeEntity {
 		this.title = title;
 		this.description = description;
 		this.likesCount = 0;
+		this.commentsCount = 0;
+		this.isDeleted = false;
 	}
 
 	public static Board newInstance(Long memberId, String title, String description) {
@@ -100,6 +108,14 @@ public class Board extends BaseTimeEntity {
 		this.description = description;
 		this.pictureList.clear();
 		this.addPictures(pictures);
+	}
+
+	public void increaseCommentsCount() {
+		this.commentsCount++;
+	}
+
+	public void decreaseCommentsCount() {
+		this.commentsCount--;
 	}
 
 }
