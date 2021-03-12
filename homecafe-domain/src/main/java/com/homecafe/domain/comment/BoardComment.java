@@ -42,4 +42,8 @@ public class BoardComment extends BaseTimeEntity {
 		this.isDeleted = true;
 	}
 
+	public void update(String content) {
+		this.content = content;
+	}
+
 }

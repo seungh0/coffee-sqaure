@@ -17,7 +17,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
 	@Override
 	public List<Board> findBoardsOrderByIdDesc(int size) {
-		return queryFactory.selectFrom(board)
+		return queryFactory.selectFrom(board).distinct()
 				.leftJoin(board.pictureList, boardPicture).fetchJoin()
 				.where(
 						board.isDeleted.isFalse()
@@ -29,7 +29,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
 	@Override
 	public List<Board> findBoardsLessThanOrderByIdDescLimit(Long lastBoardId, int size) {
-		return queryFactory.selectFrom(board)
+		return queryFactory.selectFrom(board).distinct()
 				.leftJoin(board.pictureList, boardPicture).fetchJoin()
 				.where(
 						board.id.lt(lastBoardId),
@@ -52,7 +52,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
 	@Override
 	public List<Board> findBoardsWithKeywordOrderByIdDesc(String keyword, int size) {
-		return queryFactory.selectFrom(board)
+		return queryFactory.selectFrom(board).distinct()
 				.leftJoin(board.pictureList, boardPicture).fetchJoin()
 				.where(
 						board.title.contains(keyword),
@@ -65,7 +65,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
 	@Override
 	public List<Board> findBoardsWithKeywordLessThanOrderByIdDescLimit(String keyword, Long lastBoardId, int size) {
-		return queryFactory.selectFrom(board)
+		return queryFactory.selectFrom(board).distinct()
 				.leftJoin(board.pictureList, boardPicture).fetchJoin()
 				.where(
 						board.id.lt(lastBoardId),
@@ -79,12 +79,14 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
 	@Override
 	public List<Board> findBoardByMemberId(Long memberId) {
-		return queryFactory.selectFrom(board)
+		return queryFactory.selectFrom(board).distinct()
 				.leftJoin(board.pictureList, boardPicture).fetchJoin()
 				.where(
 						board.memberId.eq(memberId),
 						board.isDeleted.isFalse()
-				).fetch();
+				)
+				.orderBy(board.id.desc())
+				.fetch();
 	}
 
 	@Override
@@ -103,13 +105,15 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	 */
 	@Override
 	public List<Board> findLikeBoardByMemberId(Long memberId) {
-		return queryFactory.selectFrom(board).distinct()
+		return queryFactory.selectFrom(board)
 				.innerJoin(board.boardLikeList, boardLike).fetchJoin()
 				.where(
 						board.memberId.eq(memberId),
 						boardLike.memberId.eq(memberId),
 						board.isDeleted.isFalse()
-				).fetch();
+				)
+				.orderBy(board.id.desc())
+				.fetch();
 	}
 
 }

@@ -5,6 +5,7 @@ import com.homecafe.controller.ApiResponse;
 import com.homecafe.service.comment.BoardCommentService;
 import com.homecafe.service.comment.dto.request.AddCommentRequest;
 import com.homecafe.service.comment.dto.request.DeleteCommentRequest;
+import com.homecafe.service.comment.dto.request.UpdateCommentRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,13 @@ public class BoardCommentController {
 	@PostMapping("/api/v1/board/comment")
 	public ApiResponse<String> addBoardComment(@Valid @RequestBody AddCommentRequest request, @LoginMember Long memberId) {
 		boardCommentService.addComment(request, memberId);
+		return ApiResponse.OK;
+	}
+
+	@Operation(summary = "피드에 댓글을 수하는 API", description = "Bearer Token 필요")
+	@PutMapping("/api/v1/board/comment")
+	public ApiResponse<String> updateBoardComment(@Valid @RequestBody UpdateCommentRequest request, @LoginMember Long memberId) {
+		boardCommentService.updateComment(request, memberId);
 		return ApiResponse.OK;
 	}
 
