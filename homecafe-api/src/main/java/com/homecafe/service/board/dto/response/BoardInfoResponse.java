@@ -16,18 +16,18 @@ public class BoardInfoResponse {
 
 	private final Long id;
 
-	private final String title;
-
 	private final String description;
 
 	private final int likesCount;
 
 	private final int commentsCount;
 
+	private final boolean isLike;
+
 	private final List<String> pictureUrls = new ArrayList<>();
 
-	public static BoardInfoResponse of(Board board) {
-		BoardInfoResponse response = new BoardInfoResponse(board.getId(), board.getTitle(), board.getDescription(), board.getLikesCount(), board.getCommentsCount());
+	public static BoardInfoResponse of(Board board, Long memberId) {
+		BoardInfoResponse response = new BoardInfoResponse(board.getId(), board.getDescription(), board.getLikesCount(), board.getCommentsCount(), board.isLike(memberId));
 		response.pictureUrls.addAll(board.getPictures());
 		return response;
 	}

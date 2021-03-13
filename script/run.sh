@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+cd /home/ubuntu/homecafe-backend
+
+./gradlew clean build
+
 PORT=9000
 
 PID=$(lsof -ti tcp:${PORT})
@@ -12,9 +16,5 @@ else
   echo "기존에 실행중인 서버를 종료합니다"
   sleep 3
 fi
-
-cd /home/ubuntu/homecafe-backend
-
-./gradlew clean build
 
 nohup java -jar -Dspring.profiles.active=prod ./homecafe-api/build/libs/homecafe-api.jar &

@@ -26,11 +26,11 @@ public class BoardWithCommentInfoResponse {
 
 	private final List<BoardCommentInfoResponse> comments = new ArrayList<>();
 
-	public static BoardWithCommentInfoResponse of(Board board, List<BoardComment> boardCommentList, Member member, BoardCommentMemberCollection collection) {
+	public static BoardWithCommentInfoResponse of(Board board, List<BoardComment> boardCommentList, Member creator, BoardCommentMemberCollection collection, Long memberId) {
 		List<BoardCommentInfoResponse> commentInfoResponses = boardCommentList.stream()
 				.map(boardComment -> BoardCommentInfoResponse.of(boardComment, collection.getMember(boardComment.getMemberId())))
 				.collect(Collectors.toList());
-		BoardWithCommentInfoResponse response = new BoardWithCommentInfoResponse(BoardInfoResponse.of(board), MemberInfoResponse.of(member));
+		BoardWithCommentInfoResponse response = new BoardWithCommentInfoResponse(BoardInfoResponse.of(board, memberId), MemberInfoResponse.of(creator));
 		response.comments.addAll(commentInfoResponses);
 		return response;
 	}

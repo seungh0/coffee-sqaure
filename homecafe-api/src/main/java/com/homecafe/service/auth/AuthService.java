@@ -1,5 +1,6 @@
 package com.homecafe.service.auth;
 
+import com.homecafe.config.session.MemberSession;
 import com.homecafe.domain.member.Member;
 import com.homecafe.domain.member.MemberRepository;
 import com.homecafe.external.kakao.KaKaoApiCaller;
@@ -32,7 +33,7 @@ public class AuthService {
 		if (findMember == null) {
 			return AuthResponse.signUpWithKaKao(userInfoResponse.getEmail(), userInfoResponse.getName(), userInfoResponse.getProfileImage());
 		}
-		httpSession.setAttribute(AUTH_SESSION, findMember.getId());
+		httpSession.setAttribute(AUTH_SESSION, MemberSession.of(findMember.getId()));
 		return AuthResponse.login(httpSession.getId());
 	}
 

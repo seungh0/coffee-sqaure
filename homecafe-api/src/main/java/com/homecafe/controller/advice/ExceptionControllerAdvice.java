@@ -31,7 +31,7 @@ public class ExceptionControllerAdvice {
 	public ApiResponse<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 		log.error(e.getMessage(), e);
 		String field = e.getBindingResult().getFieldError() == null ? "" : e.getBindingResult().getFieldError().getField();
-		return new ApiResponse<>("VALIDATION_EXCEPTION", String.format("(%s) %s", field, e.getBindingResult().getFieldError().getDefaultMessage()), null);
+		return new ApiResponse<>("VALIDATION_EXCEPTION", e.getBindingResult().getFieldError().getDefaultMessage(), null);
 	}
 
 	@ExceptionHandler(BindException.class)
@@ -39,7 +39,7 @@ public class ExceptionControllerAdvice {
 	public ApiResponse<Object> handleBindException(BindException e) {
 		log.error(e.getMessage(), e);
 		String field = e.getBindingResult().getFieldError() == null ? "" : e.getBindingResult().getFieldError().getField();
-		return new ApiResponse<>("VALIDATION_EXCEPTION", String.format("(%s) %s", field, Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage()), null);
+		return new ApiResponse<>("VALIDATION_EXCEPTION", Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage(), null);
 	}
 
 	@ExceptionHandler(UnauthorizedException.class)

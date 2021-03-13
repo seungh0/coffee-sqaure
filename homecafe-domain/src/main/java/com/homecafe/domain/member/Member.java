@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 
@@ -46,12 +45,8 @@ public class Member extends BaseTimeEntity {
 	}
 
 	public void updateMemberInfo(String name, String profileUrl) {
-		if (StringUtils.hasText(name)) {
-			this.name = name;
-		}
-		if (StringUtils.hasText(profileUrl)) {
-			this.profileUrl = profileUrl;
-		}
+		this.name = name;
+		this.profileUrl = profileUrl;
 	}
 
 }

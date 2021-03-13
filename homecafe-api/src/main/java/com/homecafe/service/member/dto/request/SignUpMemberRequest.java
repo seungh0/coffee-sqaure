@@ -12,10 +12,10 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class SignUpMemberRequest {
 
-	@NotBlank
+	@NotBlank(message = "이메일을 입력해주세요")
 	private String email;
 
-	@NotBlank
+	@NotBlank(message = "이름을 입력해주세요")
 	private String name;
 
 	private String profileUrl;

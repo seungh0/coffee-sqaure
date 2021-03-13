@@ -18,8 +18,8 @@ public class BoardWithCreatorInfoResponse {
 
 	private final MemberInfoResponse creator;
 
-	public static BoardWithCreatorInfoResponse of(Board board, Member member) {
-		return new BoardWithCreatorInfoResponse(BoardInfoResponse.of(board), MemberInfoResponse.of(member));
+	public static BoardWithCreatorInfoResponse of(Board board, Member member, Long memberId) {
+		return new BoardWithCreatorInfoResponse(BoardInfoResponse.of(board, memberId), MemberInfoResponse.of(member));
 	}
 
 }

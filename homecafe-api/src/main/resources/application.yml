@@ -1,18 +1,14 @@
 server:
   port: 9000
 spring:
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+  session:
+    store-type: jdbc
   profiles:
     active: local
     include:
       - domain
       - thirdparty
       - swagger
-      - cloud
-      - aws
       - rds
   datasource:
     data: classpath:schema/schema-session.sql

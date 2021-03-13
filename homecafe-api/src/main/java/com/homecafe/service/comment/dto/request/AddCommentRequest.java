@@ -13,10 +13,10 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class AddCommentRequest {
 
-	@NotNull
+	@NotNull(message = "피드의 id를 선택해주세요")
 	private Long boardId;
 
-	@NotBlank
+	@NotBlank(message = "댓글의 내용을 입력해주세요")
 	private String content;
 
 	public BoardComment toEntity(Long memberId) {

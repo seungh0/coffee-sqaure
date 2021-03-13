@@ -26,9 +26,6 @@ public class Board extends BaseTimeEntity {
 	private Long memberId;
 
 	@Column(nullable = false)
-	private String title;
-
-	@Column(nullable = false)
 	private String description;
 
 	private int likesCount;
@@ -43,17 +40,16 @@ public class Board extends BaseTimeEntity {
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<BoardLike> boardLikeList = new ArrayList<>();
 
-	private Board(Long memberId, String title, String description) {
+	private Board(Long memberId, String description) {
 		this.memberId = memberId;
-		this.title = title;
 		this.description = description;
 		this.likesCount = 0;
 		this.commentsCount = 0;
 		this.isDeleted = false;
 	}
 
-	public static Board newInstance(Long memberId, String title, String description) {
-		return new Board(memberId, title, description);
+	public static Board newInstance(Long memberId, String description) {
+		return new Board(memberId, description);
 	}
 
 	public void addPictures(List<String> pictureUrls) {
@@ -103,8 +99,7 @@ public class Board extends BaseTimeEntity {
 		this.isDeleted = true;
 	}
 
-	public void updateInfo(String title, String description, List<String> pictures) {
-		this.title = title;
+	public void updateInfo(String description, List<String> pictures) {
 		this.description = description;
 		this.pictureList.clear();
 		this.addPictures(pictures);
@@ -116,6 +111,11 @@ public class Board extends BaseTimeEntity {
 
 	public void decreaseCommentsCount() {
 		this.commentsCount--;
+	}
+
+	public boolean isLike(Long memberId) {
+		return this.boardLikeList.stream()
+				.anyMatch(boardLike -> boardLike.isSameEntity(memberId));
 	}
 
 }

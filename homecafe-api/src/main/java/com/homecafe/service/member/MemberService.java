@@ -27,6 +27,7 @@ public class MemberService {
 		return MemberInfoResponse.of(member);
 	}
 
+	@Transactional
 	public MemberInfoResponse updateMemberInfo(UpdateMemberInfoRequest request, Long memberId) {
 		Member member = MemberServiceUtils.findMemberById(memberRepository, memberId);
 		member.updateMemberInfo(request.getName(), request.getProfileUrl());

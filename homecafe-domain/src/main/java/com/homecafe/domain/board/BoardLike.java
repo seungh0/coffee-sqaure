@@ -32,7 +32,7 @@ public class BoardLike extends BaseTimeEntity {
 		return new BoardLike(board, memberId);
 	}
 
-	public boolean isSameEntity(Long memberId) {
+	boolean isSameEntity(Long memberId) {
 		return this.memberId.equals(memberId);
 	}
 

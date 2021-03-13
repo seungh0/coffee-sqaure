@@ -1,7 +1,7 @@
 package com.homecafe.service.board;
 
 import com.homecafe.domain.board.Board;
-import com.homecafe.domain.board.BoardMemberCollection;
+import com.homecafe.domain.board.BoardCreatorCollection;
 import com.homecafe.domain.board.BoardRepository;
 import com.homecafe.domain.comment.BoardComment;
 import com.homecafe.domain.comment.BoardCommentMemberCollection;
@@ -33,65 +33,65 @@ public class BoardService {
 	@Transactional
 	public BoardInfoResponse createBoard(CreateBoardRequest request, Long memberId) {
 		Board board = boardRepository.save(request.toEntity(memberId));
-		return BoardInfoResponse.of(board);
+		return BoardInfoResponse.of(board, memberId);
 	}
 
 	@Transactional(readOnly = true)
-	public List<BoardWithCreatorInfoResponse> retrieveBoardList(Long lastBoardId, int size) {
-		return lastBoardId == 0 ? getLatestBoards(size) : getLatestBoardLessThanId(lastBoardId, size);
+	public List<BoardWithCreatorInfoResponse> retrieveBoardList(Long lastBoardId, int size, Long memberId) {
+		return lastBoardId == 0 ? getLatestBoards(size, memberId) : getLatestBoardLessThanId(lastBoardId, size, memberId);
 	}
 
-	private List<BoardWithCreatorInfoResponse> getLatestBoards(int size) {
+	private List<BoardWithCreatorInfoResponse> getLatestBoards(int size, Long memberId) {
 		List<Board> boardList = boardRepository.findBoardsOrderByIdDesc(size);
-		BoardMemberCollection collection = BoardMemberCollection.of(memberRepository, boardList);
+		BoardCreatorCollection collection = BoardCreatorCollection.of(memberRepository, boardList);
 		return boardList.stream()
-				.map(board -> BoardWithCreatorInfoResponse.of(board, collection.getMember(board.getMemberId())))
+				.map(board -> BoardWithCreatorInfoResponse.of(board, collection.getCreator(board.getMemberId()), memberId))
 				.collect(Collectors.toList());
 	}
 
-	private List<BoardWithCreatorInfoResponse> getLatestBoardLessThanId(Long lastBoardId, int size) {
+	private List<BoardWithCreatorInfoResponse> getLatestBoardLessThanId(Long lastBoardId, int size, Long memberId) {
 		List<Board> boardList = boardRepository.findBoardsLessThanOrderByIdDescLimit(lastBoardId, size);
-		BoardMemberCollection collection = BoardMemberCollection.of(memberRepository, boardList);
+		BoardCreatorCollection collection = BoardCreatorCollection.of(memberRepository, boardList);
 		return boardList.stream()
-				.map(board -> BoardWithCreatorInfoResponse.of(board, collection.getMember(board.getMemberId())))
+				.map(board -> BoardWithCreatorInfoResponse.of(board, collection.getCreator(board.getMemberId()), memberId))
 				.collect(Collectors.toList());
 	}
 
 	@Transactional(readOnly = true)
-	public List<BoardWithCreatorInfoResponse> retrieveSearchBoardList(String keyword, Long lastBoardId, int size) {
-		return lastBoardId == 0 ? getLatestSearchBoards(keyword, size) : getLatestSearchBoardLessThanId(keyword, lastBoardId, size);
+	public List<BoardWithCreatorInfoResponse> retrieveSearchBoardList(String keyword, Long lastBoardId, int size, Long memberId) {
+		return lastBoardId == 0 ? getLatestSearchBoards(keyword, size, memberId) : getLatestSearchBoardLessThanId(keyword, lastBoardId, size, memberId);
 	}
 
-	private List<BoardWithCreatorInfoResponse> getLatestSearchBoards(String keyword, int size) {
+	private List<BoardWithCreatorInfoResponse> getLatestSearchBoards(String keyword, int size, Long memberId) {
 		List<Board> boardList = boardRepository.findBoardsWithKeywordOrderByIdDesc(keyword, size);
-		BoardMemberCollection collection = BoardMemberCollection.of(memberRepository, boardList);
+		BoardCreatorCollection collection = BoardCreatorCollection.of(memberRepository, boardList);
 		return boardList.stream()
-				.map(board -> BoardWithCreatorInfoResponse.of(board, collection.getMember(board.getMemberId())))
+				.map(board -> BoardWithCreatorInfoResponse.of(board, collection.getCreator(board.getMemberId()), memberId))
 				.collect(Collectors.toList());
 	}
 
-	private List<BoardWithCreatorInfoResponse> getLatestSearchBoardLessThanId(String keyword, Long lastBoardId, int size) {
+	private List<BoardWithCreatorInfoResponse> getLatestSearchBoardLessThanId(String keyword, Long lastBoardId, int size, Long memberId) {
 		List<Board> boardList = boardRepository.findBoardsWithKeywordLessThanOrderByIdDescLimit(keyword, lastBoardId, size);
-		BoardMemberCollection collection = BoardMemberCollection.of(memberRepository, boardList);
+		BoardCreatorCollection collection = BoardCreatorCollection.of(memberRepository, boardList);
 		return boardList.stream()
-				.map(board -> BoardWithCreatorInfoResponse.of(board, collection.getMember(board.getMemberId())))
+				.map(board -> BoardWithCreatorInfoResponse.of(board, collection.getCreator(board.getMemberId()), memberId))
 				.collect(Collectors.toList());
 	}
 
 	@Transactional(readOnly = true)
-	public BoardWithCommentInfoResponse retrieveBoard(Long boardId) {
+	public BoardWithCommentInfoResponse retrieveBoard(Long boardId, Long memberId) {
 		Board board = BoardServiceUtils.findBoardById(boardRepository, boardId);
-		Member member = MemberServiceUtils.findMemberById(memberRepository, board.getMemberId());
+		Member creator = MemberServiceUtils.findMemberById(memberRepository, board.getMemberId());
 		List<BoardComment> boardCommentList = BoardCommentServiceUtils.findAllBoardCommentsByCommentId(boardCommentRepository, board.getId());
 		BoardCommentMemberCollection collection = BoardCommentMemberCollection.of(memberRepository, boardCommentList);
-		return BoardWithCommentInfoResponse.of(board, boardCommentList, member, collection);
+		return BoardWithCommentInfoResponse.of(board, boardCommentList, creator, collection, memberId);
 	}
 
 	@Transactional
 	public BoardInfoResponse updateBoard(UpdateBoardRequest request, Long memberId) {
 		Board board = BoardServiceUtils.findBoardByIdAndMemberId(boardRepository, request.getBoardId(), memberId);
-		board.updateInfo(request.getTitle(), request.getDescription(), request.getPictures());
-		return BoardInfoResponse.of(board);
+		board.updateInfo(request.getDescription(), request.getPictures());
+		return BoardInfoResponse.of(board, memberId);
 	}
 
 	@Transactional
@@ -116,7 +116,7 @@ public class BoardService {
 	public List<BoardInfoResponse> retrieveMyBoardList(Long memberId) {
 		List<Board> boardList = boardRepository.findBoardByMemberId(memberId);
 		return boardList.stream()
-				.map(BoardInfoResponse::of)
+				.map(board -> BoardInfoResponse.of(board, memberId))
 				.collect(Collectors.toList());
 	}
 
@@ -124,7 +124,7 @@ public class BoardService {
 	public List<BoardInfoResponse> retrieveMyLikeBoardList(Long memberId) {
 		List<Board> boardList = boardRepository.findLikeBoardByMemberId(memberId);
 		return boardList.stream()
-				.map(BoardInfoResponse::of)
+				.map(board -> BoardInfoResponse.of(board, memberId))
 				.collect(Collectors.toList());
 	}
 

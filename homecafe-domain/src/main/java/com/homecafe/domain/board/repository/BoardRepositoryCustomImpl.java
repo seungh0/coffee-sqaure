@@ -15,10 +15,11 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
 
+	// TODO 페치 조인 + 페이지네이션시, 메모리에서 limit를 해주는 문제점이 있어서 페치 조인을 하지 않고, batch_size를 제한했는데 괜찮은 방법일까?
 	@Override
 	public List<Board> findBoardsOrderByIdDesc(int size) {
 		return queryFactory.selectFrom(board).distinct()
-				.leftJoin(board.pictureList, boardPicture).fetchJoin()
+				.leftJoin(board.pictureList, boardPicture)
 				.where(
 						board.isDeleted.isFalse()
 				)
@@ -30,7 +31,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	@Override
 	public List<Board> findBoardsLessThanOrderByIdDescLimit(Long lastBoardId, int size) {
 		return queryFactory.selectFrom(board).distinct()
-				.leftJoin(board.pictureList, boardPicture).fetchJoin()
+				.leftJoin(board.pictureList, boardPicture)
 				.where(
 						board.id.lt(lastBoardId),
 						board.isDeleted.isFalse()
@@ -53,9 +54,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	@Override
 	public List<Board> findBoardsWithKeywordOrderByIdDesc(String keyword, int size) {
 		return queryFactory.selectFrom(board).distinct()
-				.leftJoin(board.pictureList, boardPicture).fetchJoin()
+				.leftJoin(board.pictureList, boardPicture)
 				.where(
-						board.title.contains(keyword),
+						board.description.contains(keyword),
 						board.isDeleted.isFalse()
 				)
 				.orderBy(board.id.desc())
@@ -66,10 +67,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 	@Override
 	public List<Board> findBoardsWithKeywordLessThanOrderByIdDescLimit(String keyword, Long lastBoardId, int size) {
 		return queryFactory.selectFrom(board).distinct()
-				.leftJoin(board.pictureList, boardPicture).fetchJoin()
+				.leftJoin(board.pictureList, boardPicture)
 				.where(
 						board.id.lt(lastBoardId),
-						board.title.contains(keyword),
+						board.description.contains(keyword),
 						board.isDeleted.isFalse()
 				)
 				.orderBy(board.id.desc())

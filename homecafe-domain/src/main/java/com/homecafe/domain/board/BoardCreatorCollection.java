@@ -9,11 +9,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class BoardMemberCollection {
+public final class BoardCreatorCollection {
 
 	private final Map<Long, Member> memberMap = new HashMap<>();
 
-	private BoardMemberCollection(MemberRepository memberRepository, List<Board> boardList) {
+	private BoardCreatorCollection(MemberRepository memberRepository, List<Board> boardList) {
 		this.memberMap.putAll(findMembersInBoardList(memberRepository, boardList));
 	}
 
@@ -28,11 +28,11 @@ public final class BoardMemberCollection {
 				.collect(Collectors.toSet());
 	}
 
-	public static BoardMemberCollection of(MemberRepository memberRepository, List<Board> boardList) {
-		return new BoardMemberCollection(memberRepository, boardList);
+	public static BoardCreatorCollection of(MemberRepository memberRepository, List<Board> boardList) {
+		return new BoardCreatorCollection(memberRepository, boardList);
 	}
 
-	public Member getMember(Long memberId) {
+	public Member getCreator(Long memberId) {
 		return memberMap.get(memberId);
 	}
 

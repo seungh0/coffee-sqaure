@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class AuthRequest {
 
-	@NotBlank
+	@NotBlank(message = "토큰을 입력해주세요")
 	private String accessToken;
 
 }
